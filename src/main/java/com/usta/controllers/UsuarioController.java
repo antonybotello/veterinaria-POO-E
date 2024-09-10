@@ -48,11 +48,18 @@ public class UsuarioController {
 
     @FXML
     public void initialize(){
+       
         documentoCol.setCellValueFactory(new PropertyValueFactory<>("documento"));
         nombresCol.setCellValueFactory(new PropertyValueFactory<>("nombres"));
         apellidosCol.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
         correoCol.setCellValueFactory(new PropertyValueFactory<>("correo"));
-
+        try {
+            usuariosDataList.addAll(usuarioDao.getAll());
+            usuariosTable.setItems(usuariosDataList);
+        } catch (SQLException e) {
+            System.err.println("Error al agregar Usuario!");
+            e.printStackTrace();
+        }
     }
 
     @FXML

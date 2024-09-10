@@ -11,7 +11,7 @@ public class ConnectionManager {
         try{
             String url="jdbc:mysql://localhost:3306/gestor_bd";
             String user="root";
-            String password="";
+            String password="Root";
             connection= DriverManager.getConnection(url, user, password);
         }catch (SQLException e){
             e.printStackTrace();

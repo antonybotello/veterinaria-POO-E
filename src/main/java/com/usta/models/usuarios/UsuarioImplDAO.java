@@ -37,7 +37,7 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
 
     @Override
     public void delete(int id) throws SQLException {
-        String query = "DELETE FROM usuarios WHERE usuarioId=?";
+        String query = "DELETE FROM usuarios WHERE idUsuarios=?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -52,7 +52,7 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
         String query = "SELECT * FROM usuarios";
         try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query);) {
             while (rs.next()) {
-                usuarios.add(new Usuario(rs.getInt("usuarioId"),
+                usuarios.add(new Usuario(rs.getInt("idUsuarios"),
                         rs.getString("documento"),
                         rs.getString("nombres"),
                         rs.getString("apellidos"),
@@ -88,7 +88,7 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
 
     @Override
     public void update(Usuario obj) throws SQLException {
-        String query = "UPDATE Usuarios SET nombres=?, apellidos=?, correo=? WHERE usuarioId=?";
+        String query = "UPDATE Usuarios SET nombres=?, apellidos=?, correo=? WHERE idUsuarios=?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, obj.getNombres());
             stmt.setString(2, obj.getApellidos());
