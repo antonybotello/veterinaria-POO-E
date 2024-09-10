@@ -5,7 +5,10 @@ module com.usta {
     opens com.usta.controllers to javafx.fxml;
 
 
+
     exports com.usta;
     exports com.usta.controllers;
+    exports com.usta.models.usuarios;
+
     //exports com.usta.models;
 }

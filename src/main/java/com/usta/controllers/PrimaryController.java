@@ -12,4 +12,8 @@ public class PrimaryController {
     private void switchToSecondary() throws IOException {
         App.setRoot("secondary");
     }
+    @FXML
+    private void switchToUsuario() throws IOException {
+        App.setRoot("usuario");
+    }
 }
