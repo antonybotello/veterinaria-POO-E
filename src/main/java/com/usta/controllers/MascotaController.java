@@ -167,7 +167,6 @@ public class MascotaController {
         especieField.setText("");
         especieField.setEditable(true);
         nombreField.setText("");
-        cuidadorField.setText("");
         agregarBtn.setVisible(true);
         editarBtn.setVisible(false);
         eliminarBtn.setVisible(false);

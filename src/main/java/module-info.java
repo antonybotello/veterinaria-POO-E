@@ -9,6 +9,7 @@ module com.usta {
     exports com.usta;
     exports com.usta.controllers;
     exports com.usta.models.usuarios;
+    exports com.usta.models.mascota;
 
     //exports com.usta.models;
 }
