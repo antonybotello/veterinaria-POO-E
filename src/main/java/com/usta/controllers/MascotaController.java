@@ -79,7 +79,7 @@ public class MascotaController {
             mascotasDataList.addAll(mascotaDao.getAll());
             mascotasTable.setItems(mascotasDataList);
         } catch (SQLException e) {
-            System.err.println("Error al agregar Mascota!");
+            System.err.println("Error al Listar Mascotas!");
             e.printStackTrace();
         }
     }
@@ -167,6 +167,7 @@ public class MascotaController {
         especieField.setText("");
         especieField.setEditable(true);
         nombreField.setText("");
+        usuariosCbx.getSelectionModel().clearSelection();
         agregarBtn.setVisible(true);
         editarBtn.setVisible(false);
         eliminarBtn.setVisible(false);

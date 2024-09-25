@@ -68,7 +68,7 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
 
     @Override
     public Usuario getById(int id) throws SQLException {
-        String query = "SELECT * FROM usuarios WHERE idUsuario=?";
+        String query = "SELECT * FROM usuarios WHERE idUsuarios=?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
