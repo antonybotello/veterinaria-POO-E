@@ -5,6 +5,8 @@ public class Usuario {
     private String nombres;
     private String apellidos;
     private String correo;
+    private String clave;
+
     public Usuario() {
     }
     
@@ -13,15 +15,18 @@ public class Usuario {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
+        this.clave= nombres.charAt(0)+apellidos.charAt(0)+documento;
     }
 
-    public Usuario(int id, String documento, String nombres, String apellidos, String correo) {
+    public Usuario(int id, String documento, String nombres, String apellidos, String correo, String clave) {
         this.id = id;
         this.documento = documento;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
+        this.clave=clave;
     }
+    
     public int getId() {
         return id;
     }
@@ -55,6 +60,14 @@ public class Usuario {
     @Override
     public String toString() {
         return nombres+" "+apellidos;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
     }
 
     

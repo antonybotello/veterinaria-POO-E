@@ -92,7 +92,7 @@ public class UsuarioController {
     }
 
     @FXML
-    public void filtrarUsuarios(){
+    private void filtrarUsuarios(){
         String filtroTxt= buscarField.getText().toLowerCase();
 
         if(usuariosFiltrados == null){
@@ -141,8 +141,9 @@ public class UsuarioController {
         String nombres= nombresField.getText();
         String apellidos= apellidosField.getText();
         String correo= correoField.getText();
+        String clave= usuario.getClave();
     
-        Usuario usuarioEditado= new Usuario(usuario.getId(),documento, nombres, apellidos, correo);
+        Usuario usuarioEditado= new Usuario(usuario.getId(),documento, nombres, apellidos, correo,clave);
         try {
             usuarioDao.update(usuarioEditado);
             usuariosDataList.remove(usuariosTable.getSelectionModel().getSelectedItem());
