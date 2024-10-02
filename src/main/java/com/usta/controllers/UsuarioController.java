@@ -9,8 +9,10 @@ import com.usta.models.usuarios.UsuarioImplDAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -59,6 +61,19 @@ public class UsuarioController {
     private ObservableList<Usuario> usuariosDataList = FXCollections.observableArrayList();
 
     //########################## fintabla ##############
+    //########################## para la búsqueda ##############
+    @FXML
+    private TextField buscarField;
+    @FXML
+    private CheckBox documentoChk;
+    @FXML
+    private CheckBox nombresChk;
+    @FXML
+    private CheckBox apellidosChk;
+    @FXML
+    private CheckBox correoChk;
+    private FilteredList<Usuario> usuariosFiltrados;
+    //########################## fin para la búsqueda ##############
 
     @FXML
     public void initialize(){
@@ -76,6 +91,31 @@ public class UsuarioController {
         }
     }
 
+    @FXML
+    public void filtrarUsuarios(){
+        String filtroTxt= buscarField.getText().toLowerCase();
+
+        if(usuariosFiltrados == null){
+            usuariosFiltrados= new FilteredList<>(usuariosDataList,p->true);
+
+        }
+        usuariosFiltrados.setPredicate(usuario->{
+            if(filtroTxt == null || filtroTxt.isEmpty()){
+                return true;
+            }
+            boolean documentoMatch= documentoChk.isSelected() &&
+             usuario.getDocumento().toLowerCase().contains(filtroTxt);
+            boolean nombresMatch= nombresChk.isSelected() &&
+            usuario.getNombres().toLowerCase().contains(filtroTxt);
+            boolean apellidosMatch= apellidosChk.isSelected() &&
+            usuario.getApellidos().toLowerCase().contains(filtroTxt);
+            boolean correoMatch= correoChk.isSelected() &&
+            usuario.getCorreo().toLowerCase().contains(filtroTxt);
+            return documentoMatch || nombresMatch || apellidosMatch|| correoMatch;
+        }
+        );
+        usuariosTable.setItems(usuariosFiltrados);
+    }
     @FXML
     public void agregarUsuario(){
         String documento= documentoField.getText();
@@ -127,7 +167,6 @@ public class UsuarioController {
         usuariosTable.setItems(usuariosDataList);
         limpiarCampos();
     }
-
     @FXML
     public void seleccionarUsuario(){
         Usuario usuario= usuariosTable.getSelectionModel().getSelectedItem();
