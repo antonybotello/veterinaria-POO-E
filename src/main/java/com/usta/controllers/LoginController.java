@@ -1,11 +1,13 @@
 package com.usta.controllers;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.usta.App;
 import com.usta.models.usuarios.UsuarioImplDAO;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class LoginController {
@@ -15,12 +17,17 @@ public class LoginController {
         private TextField usuarioField;
         
         @FXML
-        private PassewordField usuarioField;
+        private PasswordField passField;
         
     @FXML
     private void switchToMenu() throws IOException {
-        if (usuarioDao.isUsuario())
-        App.setRoot("secondary");
+        try {
+            if (usuarioDao.isUsuario(usuarioField.getText(),passField.getText()))
+            App.setRoot("secondary");
+        } catch (SQLException e) {
+            System.out.println("Datos incorrectos");
+            e.printStackTrace();
+        }
     }
     @FXML
     private void switchToSecondary() throws IOException {
