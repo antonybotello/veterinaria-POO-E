@@ -103,26 +103,25 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
     }
 
    
-    public Usuario isUsuario(String doc, String pass) throws SQLException {
-        String query = "SELECT * FROM usuarios WHERE documento=?,clave=?";
+    public Boolean isUsuario(String doc, String pass) throws SQLException {
+        String query = "SELECT * FROM usuarios WHERE documento=? AND clave=?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, doc);
             stmt.setString(2, pass);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Usuario usuario = new Usuario();
-                    usuario.setId(rs.getInt("idUsuarios"));
-                    usuario.setDocumento(rs.getString("documento"));
-                    usuario.setNombres(rs.getString("nombres"));
-                    usuario.setApellidos(rs.getString("apellidos"));
-                    usuario.setCorreo(rs.getString("correo"));
-                    usuario.setClave(rs.getString("clave"));
+                    
 
-                    return usuario;
+                    return true;
                 }
+                else{
+                    return false;
+                }
+            }catch (Exception e) {
+             System.err.println("################"+ e.getMessage());   // TODO: handle exception
             }
         }
-        return null;
+        return false;
     }
 }
