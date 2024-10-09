@@ -120,6 +120,11 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
 
                     return true;
                 }
+                else{
+                    return false;
+                }
+            }catch (Exception e) {
+             System.err.println("################"+ e.getMessage());   // TODO: handle exception
             }
         }
         return false;
