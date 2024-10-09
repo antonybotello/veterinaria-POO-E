@@ -57,7 +57,9 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
                         rs.getString("nombres"),
                         rs.getString("apellidos"),
                         rs.getString("correo"),
-                        rs.getString("clave")
+                        rs.getString("clave"),
+                        rs.getString("foto")
+
 
 
                 ));
@@ -82,6 +84,7 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
                     usuario.setApellidos(rs.getString("apellidos"));
                     usuario.setCorreo(rs.getString("correo"));
                     usuario.setClave(rs.getString("clave"));
+                    usuario.setFoto(rs.getString("foto"));
 
                     return usuario;
                 }
@@ -92,37 +95,33 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
 
     @Override
     public void update(Usuario obj) throws SQLException {
-        String query = "UPDATE Usuarios SET nombres=?, apellidos=?, correo=? WHERE idUsuarios=?";
+        String query = "UPDATE Usuarios SET nombres=?, apellidos=?, correo=?,foto=? WHERE idUsuarios=?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, obj.getNombres());
             stmt.setString(2, obj.getApellidos());
             stmt.setString(3, obj.getCorreo());
             stmt.setInt(4, obj.getId());
+            stmt.setString(5, obj.getFoto());
+
             stmt.executeUpdate();
         }
     }
 
    
-    public Usuario isUsuario(String doc, String pass) throws SQLException {
-        String query = "SELECT * FROM usuarios WHERE documento=?,clave=?";
+    public Boolean isUsuario(String doc, String pass) throws SQLException {
+        String query = "SELECT * FROM usuarios WHERE documento=? AND clave=?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, doc);
             stmt.setString(2, pass);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Usuario usuario = new Usuario();
-                    usuario.setId(rs.getInt("idUsuarios"));
-                    usuario.setDocumento(rs.getString("documento"));
-                    usuario.setNombres(rs.getString("nombres"));
-                    usuario.setApellidos(rs.getString("apellidos"));
-                    usuario.setCorreo(rs.getString("correo"));
-                    usuario.setClave(rs.getString("clave"));
+                    
 
-                    return usuario;
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 }

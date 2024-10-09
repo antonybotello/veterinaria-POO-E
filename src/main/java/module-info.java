@@ -2,6 +2,7 @@ module com.usta {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires javafx.graphics;
     opens com.usta.controllers to javafx.fxml;
 
 
