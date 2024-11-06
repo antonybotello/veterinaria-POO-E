@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.usta.controllers.WelcomeController">
+   <center>
+      <VBox alignment="CENTER" spacing="20.0">
+           <children>
+              <Label fx:id="welcomeLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+              <Label style="-fx-font-size: 16px;" text="Estamos aquí para ayudarte a cuidar de tus mascotas" />
+              <Button fx:id="startButton" onAction="#startApp" style="-fx-font-size: 14px;" text="Comenzar" />
+          </children>
+          <padding>
+              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+          </padding>
+      </VBox>
+   </center>
+   <left>
+      <ToolBar nodeOrientation="LEFT_TO_RIGHT" orientation="VERTICAL" prefHeight="710.0" prefWidth="142.0" BorderPane.alignment="CENTER">
+         <items>
+            <Button mnemonicParsing="false" onAction="#switchToMenu" text="Inicio" />
+            <Button mnemonicParsing="false" text="Usuarios" />
+            <Button mnemonicParsing="false" onAction="#switchToMascota" text="Mascotas" />
+         </items>
+      </ToolBar>
+   </left>
+</BorderPane>

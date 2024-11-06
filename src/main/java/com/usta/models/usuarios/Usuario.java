@@ -7,7 +7,7 @@ public class Usuario {
     private String apellidos;
     private String correo;
     private String clave;
-    private String foto;
+    
 
     public Usuario() {
     }
@@ -19,26 +19,16 @@ public class Usuario {
         this.correo = correo;
         this.clave= nombres.charAt(0)+apellidos.charAt(0)+documento;
     }
-    //crear con foto
-    public Usuario(String documento, String nombres, String apellidos, String correo,String foto) {
-        this.documento = documento;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.correo = correo;
-        this.clave= nombres.charAt(0)+apellidos.charAt(0)+documento;
-        this.foto=foto;
-
-    }
+   
     //para el listar
-    public Usuario(int id, String documento, String nombres, String apellidos, String correo, String clave,String foto) {
+    public Usuario(int id, String documento, String nombres, String apellidos, String correo, String clave) {
         this.id = id;
         this.documento = documento;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
         this.clave=clave;
-        this.foto=foto;
-
+    
     }
     
     public int getId() {
@@ -84,14 +74,7 @@ public class Usuario {
         this.clave = clave;
     }
 
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
+   
     
 
 }

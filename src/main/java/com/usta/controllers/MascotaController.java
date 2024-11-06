@@ -152,7 +152,7 @@ public class MascotaController {
     }
     @FXML
     private void switchToMenu() throws IOException {
-        App.setRoot("primary");
+        App.setRoot("welcome");
     }
     @FXML
     private void switchToMascota() throws IOException {

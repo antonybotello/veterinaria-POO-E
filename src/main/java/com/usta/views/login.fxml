@@ -46,8 +46,8 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="usuarioField" GridPane.columnIndex="1" />
-                        <PasswordField fx:id="passField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="usuarioField" text="123456789" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="passField" text="clave123" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button mnemonicParsing="false" onAction="#switchToMenu" text="Acceder" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>

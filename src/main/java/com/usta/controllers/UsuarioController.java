@@ -129,41 +129,6 @@ public class UsuarioController {
         usuariosTable.setItems(usuariosFiltrados);
     }
 
-    public byte[] convertirImagenABytes() {
-
-        // Inicializar el arreglo de bytes
-        byte[] bytesImg = new byte[(int) archivoFoto.length()];
-
-        try {
-            // Crear un flujo de entrada para leer el archivo
-            FileInputStream fis = new FileInputStream(archivoFoto);
-
-            // Leer el contenido del archivo en el arreglo de bytes
-            fis.read(bytesImg);
-
-            // Cerrar el flujo de entrada
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Devolver el arreglo de bytes
-        return bytesImg;
-    }
-
-    public String guardarImagen(byte[] bytesImg) {
-
-        String respuesta = null;
-        try {
-            salida = new FileOutputStream(
-                    new File("src\\main\\java\\com\\usta\\view\\img\\usuarios\\" + documentoField.getText() + ".jpg"));
-            salida.write(bytesImg);
-            respuesta = "La imagen se guardo con exito.";
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return respuesta;
-    }
     @FXML
     public void agregarUsuario() {
         String documento = documentoField.getText();
@@ -172,13 +137,10 @@ public class UsuarioController {
         String correo = correoField.getText();
         String foto= fotoImg.toString();
         Usuario nuevoUsuario;
-        if (fotoImg.getImage() != null) {
-            nuevoUsuario = new Usuario(documento, nombres, apellidos, correo, foto);
-            guardarImagen(convertirImagenABytes());
-        } else {
+        
 
             nuevoUsuario = new Usuario(documento, nombres, apellidos, correo);
-        }
+        
          new Usuario(documento, nombres, apellidos, correo);
         try {
             usuarioDao.add(nuevoUsuario);
@@ -200,7 +162,7 @@ public class UsuarioController {
         String correo = correoField.getText();
         String clave = usuario.getClave();
         String foto = "";
-        Usuario usuarioEditado = new Usuario(usuario.getId(), documento, nombres, apellidos, correo, clave, foto);
+        Usuario usuarioEditado = new Usuario(usuario.getId(), documento, nombres, apellidos, correo, clave);
         try {
             usuarioDao.update(usuarioEditado);
             usuariosDataList.remove(usuariosTable.getSelectionModel().getSelectedItem());
@@ -227,21 +189,7 @@ public class UsuarioController {
         limpiarCampos();
     }
 
-    @FXML
-    public void cargarFoto() {
-       FileChooser fc = new FileChooser();
-        fc.setTitle("Subir Imagen");
-        fc.getExtensionFilters().add(new ExtensionFilter("Imágenes", "*.jpg"));
-        archivoFoto = fc.showOpenDialog(null);
-
-        if (archivoFoto != null) {
-            urlLbl.setText("" + archivoFoto.getAbsolutePath());
-            Image image = new Image(archivoFoto.toURI().toString());
-            fotoImg.setImage(image);
-        }
-
-    }
-
+    
     @FXML
     public void seleccionarUsuario() {
         Usuario usuario = usuariosTable.getSelectionModel().getSelectedItem();
@@ -251,9 +199,7 @@ public class UsuarioController {
         apellidosField.setText(usuario.getApellidos());
         correoField.setText(usuario.getCorreo());
 
-        Image image = new Image(usuario.getFoto());
 
-        fotoImg.setImage(image);
         agregarBtn.setVisible(false);
         editarBtn.setVisible(true);
         eliminarBtn.setVisible(true);
@@ -263,7 +209,7 @@ public class UsuarioController {
 
     @FXML
     private void switchToMenu() throws IOException {
-        App.setRoot("primary");
+        App.setRoot("welcome");
     }
 
     @FXML
