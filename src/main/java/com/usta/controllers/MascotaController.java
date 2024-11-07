@@ -8,6 +8,7 @@ import com.usta.models.mascota.Mascota;
 import com.usta.models.mascota.MascotaImplDAO;
 import com.usta.models.usuarios.Usuario;
 import com.usta.models.usuarios.UsuarioImplDAO;
+import com.usta.utils.Session;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,14 +18,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MascotaController {
 
-    MascotaImplDAO mascotaDao= new MascotaImplDAO();
-    UsuarioImplDAO usuarioDao= new UsuarioImplDAO();
+    MascotaImplDAO mascotaDao = new MascotaImplDAO();
+    UsuarioImplDAO usuarioDao = new UsuarioImplDAO();
 
-    //########################## para botones ##############
+    // ########################## para botones ##############
     @FXML
     private Button agregarBtn;
     @FXML
@@ -33,27 +35,24 @@ public class MascotaController {
     private Button eliminarBtn;
     @FXML
     private Button cancelarBtn;
-    
-    //########################## fin botones ##############
 
+    // ########################## fin botones ##############
 
-
-    //########################## para entrada de datos ##############
+    // ########################## para entrada de datos ##############
     @FXML
     private TextField especieField;
     @FXML
     private TextField nombreField;
     @FXML
     private TextField cuidadorField;
-    
 
     @FXML
     private ComboBox<Usuario> usuariosCbx;
     private ObservableList<Usuario> usuariosDataList = FXCollections.observableArrayList();
 
-    //########################## fin entrada de datos ##############
+    // ########################## fin entrada de datos ##############
 
-    //########################## para la tabla ##############
+    // ########################## para la tabla ##############
     @FXML
     private TableView<Mascota> mascotasTable; // le pedimos que asocie el objeto del fxml a esta variable
     @FXML
@@ -65,11 +64,14 @@ public class MascotaController {
 
     private ObservableList<Mascota> mascotasDataList = FXCollections.observableArrayList();
 
-    //########################## fintabla ##############
+    // ########################## fintabla ##############
 
     @FXML
-    public void initialize(){
-       
+    private ToolBar MenuBar;
+
+    @FXML
+    public void initialize() {
+        Session.getInstance().loadMenu(MenuBar);
         nombreCol.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         especieCol.setCellValueFactory(new PropertyValueFactory<>("especie"));
         cuidadorCol.setCellValueFactory(new PropertyValueFactory<>("cuidador"));
@@ -85,13 +87,13 @@ public class MascotaController {
     }
 
     @FXML
-    public void agregarMascota(){
-       
-        String nombre= nombreField.getText();
-        String especie= especieField.getText();
-        Usuario cuidador= usuariosCbx.getSelectionModel().getSelectedItem();
+    public void agregarMascota() {
 
-        Mascota nuevoMascota= new Mascota(nombre,especie,cuidador);
+        String nombre = nombreField.getText();
+        String especie = especieField.getText();
+        Usuario cuidador = usuariosCbx.getSelectionModel().getSelectedItem();
+
+        Mascota nuevoMascota = new Mascota(nombre, especie, cuidador);
         try {
             mascotaDao.add(nuevoMascota);
         } catch (SQLException e) {
@@ -102,14 +104,15 @@ public class MascotaController {
         mascotasTable.setItems(mascotasDataList);
         limpiarCampos();
     }
+
     @FXML
-    public void editarMascota(){
-        Mascota mascota= mascotasTable.getSelectionModel().getSelectedItem();
-        String especie= especieField.getText();
-        String nombre= nombreField.getText();
-        Usuario cuidador= usuariosCbx.getSelectionModel().getSelectedItem();
-    
-        Mascota mascotaEditado= new Mascota(mascota.getId(), nombre,especie, cuidador);
+    public void editarMascota() {
+        Mascota mascota = mascotasTable.getSelectionModel().getSelectedItem();
+        String especie = especieField.getText();
+        String nombre = nombreField.getText();
+        Usuario cuidador = usuariosCbx.getSelectionModel().getSelectedItem();
+
+        Mascota mascotaEditado = new Mascota(mascota.getId(), nombre, especie, cuidador);
         try {
             mascotaDao.update(mascotaEditado);
             mascotasDataList.remove(mascotasTable.getSelectionModel().getSelectedItem());
@@ -121,9 +124,10 @@ public class MascotaController {
         mascotasTable.setItems(mascotasDataList);
         limpiarCampos();
     }
+
     @FXML
-    public void eliminarMascota(){
-        Mascota mascota= mascotasTable.getSelectionModel().getSelectedItem();
+    public void eliminarMascota() {
+        Mascota mascota = mascotasTable.getSelectionModel().getSelectedItem();
         try {
             mascotaDao.delete(mascota.getId());
             mascotasDataList.remove(mascota);
@@ -136,8 +140,8 @@ public class MascotaController {
     }
 
     @FXML
-    public void seleccionarMascota(){
-        Mascota mascota= mascotasTable.getSelectionModel().getSelectedItem();
+    public void seleccionarMascota() {
+        Mascota mascota = mascotasTable.getSelectionModel().getSelectedItem();
         especieField.setText(mascota.getEspecie());
         especieField.setEditable(false);
         nombreField.setText(mascota.getNombre());
@@ -147,23 +151,10 @@ public class MascotaController {
         eliminarBtn.setVisible(true);
         cancelarBtn.setVisible(true);
 
+    }
 
-
-    }
     @FXML
-    private void switchToMenu() throws IOException {
-        App.setRoot("welcome");
-    }
-    @FXML
-    private void switchToMascota() throws IOException {
-        App.setRoot("mascota");
-    }
-    @FXML
-    private void switchToUsuario() throws IOException {
-        App.setRoot("usuario");
-    }
-    @FXML
-    public void limpiarCampos(){
+    public void limpiarCampos() {
         especieField.setText("");
         especieField.setEditable(true);
         nombreField.setText("");

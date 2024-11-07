@@ -1,13 +1,12 @@
 package com.usta.controllers;
-import java.io.File;
+
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.sql.SQLException;
 
 import com.usta.App;
 import com.usta.models.usuarios.Usuario;
 import com.usta.models.usuarios.UsuarioImplDAO;
+import com.usta.utils.Session;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,20 +14,18 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 public class UsuarioController {
 
     UsuarioImplDAO usuarioDao = new UsuarioImplDAO();
-    // ########################## para botones ##############
+
     @FXML
     private Button agregarBtn;
     @FXML
@@ -38,9 +35,6 @@ public class UsuarioController {
     @FXML
     private Button cancelarBtn;
 
-    // ########################## fin botones ##############
-
-    // ########################## para entrada de datos ##############
     @FXML
     private TextField documentoField;
     @FXML
@@ -49,11 +43,11 @@ public class UsuarioController {
     private TextField apellidosField;
     @FXML
     private TextField correoField;
-    // ########################## fin entrada de datos ##############
-
-    // ########################## para la tabla ##############
     @FXML
-    private TableView<Usuario> usuariosTable; // le pedimos que asocie el objeto del fxml a esta variable
+    private ComboBox<String> CbxRol; // ComboBox para el rol
+
+    @FXML
+    private TableView<Usuario> usuariosTable;
     @FXML
     private TableColumn<Usuario, String> documentoCol;
     @FXML
@@ -62,11 +56,11 @@ public class UsuarioController {
     private TableColumn<Usuario, String> apellidosCol;
     @FXML
     private TableColumn<Usuario, String> correoCol;
+    @FXML
+    private TableColumn<Usuario, String> rolCol;
 
     private ObservableList<Usuario> usuariosDataList = FXCollections.observableArrayList();
 
-    // ########################## fintabla ##############
-    // ########################## para la búsqueda ##############
     @FXML
     private TextField buscarField;
     @FXML
@@ -78,23 +72,23 @@ public class UsuarioController {
     @FXML
     private CheckBox correoChk;
     private FilteredList<Usuario> usuariosFiltrados;
-    // ########################## fin para la búsqueda ##############
 
-    @FXML
-    private ImageView fotoImg;
-    File archivoFoto;
-    FileOutputStream salida;
     @FXML
     private Label urlLbl;
 
-
+    @FXML
+    private ToolBar MenuBar;
     @FXML
     public void initialize() {
-
+        Session.getInstance().loadMenu(MenuBar);
         documentoCol.setCellValueFactory(new PropertyValueFactory<>("documento"));
         nombresCol.setCellValueFactory(new PropertyValueFactory<>("nombres"));
         apellidosCol.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
         correoCol.setCellValueFactory(new PropertyValueFactory<>("correo"));
+        rolCol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+
+        CbxRol.setItems(FXCollections.observableArrayList("ADMIN", "USER", "GUEST"));
+
         try {
             usuariosDataList.addAll(usuarioDao.getAll());
             usuariosTable.setItems(usuariosDataList);
@@ -107,23 +101,17 @@ public class UsuarioController {
     @FXML
     private void filtrarUsuarios() {
         String filtroTxt = buscarField.getText().toLowerCase();
-
         if (usuariosFiltrados == null) {
             usuariosFiltrados = new FilteredList<>(usuariosDataList, p -> true);
-
         }
         usuariosFiltrados.setPredicate(usuario -> {
             if (filtroTxt == null || filtroTxt.isEmpty()) {
                 return true;
             }
-            boolean documentoMatch = documentoChk.isSelected() &&
-                    usuario.getDocumento().toLowerCase().contains(filtroTxt);
-            boolean nombresMatch = nombresChk.isSelected() &&
-                    usuario.getNombres().toLowerCase().contains(filtroTxt);
-            boolean apellidosMatch = apellidosChk.isSelected() &&
-                    usuario.getApellidos().toLowerCase().contains(filtroTxt);
-            boolean correoMatch = correoChk.isSelected() &&
-                    usuario.getCorreo().toLowerCase().contains(filtroTxt);
+            boolean documentoMatch = documentoChk.isSelected() && usuario.getDocumento().toLowerCase().contains(filtroTxt);
+            boolean nombresMatch = nombresChk.isSelected() && usuario.getNombres().toLowerCase().contains(filtroTxt);
+            boolean apellidosMatch = apellidosChk.isSelected() && usuario.getApellidos().toLowerCase().contains(filtroTxt);
+            boolean correoMatch = correoChk.isSelected() && usuario.getCorreo().toLowerCase().contains(filtroTxt);
             return documentoMatch || nombresMatch || apellidosMatch || correoMatch;
         });
         usuariosTable.setItems(usuariosFiltrados);
@@ -135,13 +123,8 @@ public class UsuarioController {
         String nombres = nombresField.getText();
         String apellidos = apellidosField.getText();
         String correo = correoField.getText();
-        String foto= fotoImg.toString();
-        Usuario nuevoUsuario;
-        
-
-            nuevoUsuario = new Usuario(documento, nombres, apellidos, correo);
-        
-         new Usuario(documento, nombres, apellidos, correo);
+        String rol = CbxRol.getValue();
+        Usuario nuevoUsuario = new Usuario(documento, nombres, apellidos, correo, rol);
         try {
             usuarioDao.add(nuevoUsuario);
         } catch (SQLException e) {
@@ -161,8 +144,8 @@ public class UsuarioController {
         String apellidos = apellidosField.getText();
         String correo = correoField.getText();
         String clave = usuario.getClave();
-        String foto = "";
-        Usuario usuarioEditado = new Usuario(usuario.getId(), documento, nombres, apellidos, correo, clave);
+        String rol = CbxRol.getValue();
+        Usuario usuarioEditado = new Usuario(usuario.getId(), documento, nombres, apellidos, correo, clave, rol);
         try {
             usuarioDao.update(usuarioEditado);
             usuariosDataList.remove(usuariosTable.getSelectionModel().getSelectedItem());
@@ -189,7 +172,6 @@ public class UsuarioController {
         limpiarCampos();
     }
 
-    
     @FXML
     public void seleccionarUsuario() {
         Usuario usuario = usuariosTable.getSelectionModel().getSelectedItem();
@@ -198,13 +180,11 @@ public class UsuarioController {
         nombresField.setText(usuario.getNombres());
         apellidosField.setText(usuario.getApellidos());
         correoField.setText(usuario.getCorreo());
-
-
+        CbxRol.setValue(usuario.getRol());
         agregarBtn.setVisible(false);
         editarBtn.setVisible(true);
         eliminarBtn.setVisible(true);
         cancelarBtn.setVisible(true);
-
     }
 
     @FXML
@@ -229,6 +209,7 @@ public class UsuarioController {
         nombresField.setText("");
         apellidosField.setText("");
         correoField.setText("");
+        CbxRol.setValue(null);
         agregarBtn.setVisible(true);
         editarBtn.setVisible(false);
         eliminarBtn.setVisible(false);

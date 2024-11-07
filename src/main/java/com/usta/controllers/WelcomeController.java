@@ -8,20 +8,23 @@ import com.usta.utils.Session;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
 
 public class WelcomeController {
 
     @FXML
     private Label welcomeLabel;
 
+    @FXML
+    private ToolBar MenuBar;
     private Usuario usuario;
 
-    public void initialize() {
-        // Suponiendo que ya tienes el usuario cargado desde la sesión o base de datos
-        this.usuario = Session.getInstance().getCurrentUser(); // Obtenemos el usuario actual de la sesión
 
+    public void initialize() {
+        this.usuario = Session.getInstance().getCurrentUser();
+        Session.getInstance().loadMenu(MenuBar);
         if (usuario != null) {
-            welcomeLabel.setText("¡Bienvenido a VetCare, " + usuario.getNombres() + "!");
+            welcomeLabel.setText("¡Bienvenido a VetCare, " + usuario.getRol().toLowerCase() + " " + usuario.getNombres() + "!");
         } else {
             welcomeLabel.setText("¡Bienvenido a VetCare!");
         }
@@ -29,8 +32,9 @@ public class WelcomeController {
 
     @FXML
     private void startApp() {
-        // Lógica para cambiar a la siguiente vista o comenzar la aplicación
+        // Lógica para iniciar la aplicación
     }
+
     @FXML
     private void switchToMenu() throws IOException {
         App.setRoot("primary");
@@ -45,5 +49,4 @@ public class WelcomeController {
     private void switchToUsuario() throws IOException {
         App.setRoot("usuario");
     }
-
 }
