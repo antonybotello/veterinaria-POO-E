@@ -8,10 +8,14 @@ public class Usuario {
     private String correo;
     private String clave;
     private String rol;
+    private String estado;
 
     public Usuario() {
     }
 
+    // This particular constructor in the `Usuario` class is a parameterized constructor that
+    // initializes a `Usuario` object with the provided values for `documento`, `nombres`, `apellidos`,
+    // `correo`, and `rol`.
     public Usuario(String documento, String nombres, String apellidos, String correo, String rol) {
         this.documento = documento;
         this.nombres = nombres;
@@ -19,8 +23,19 @@ public class Usuario {
         this.correo = correo;
         this.clave = nombres.charAt(0) + apellidos.charAt(0) + documento;
         this.rol = rol;
+        this.estado= "ACTIVO";
     }
 
+    public Usuario(int id, String documento, String nombres, String apellidos, String correo, String clave, String rol, String estado) {
+        this.id = id;
+        this.documento = documento;
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.correo = correo;
+        this.clave = clave;
+        this.rol = rol;
+        this.estado= estado;
+    }
     public Usuario(int id, String documento, String nombres, String apellidos, String correo, String clave, String rol) {
         this.id = id;
         this.documento = documento;
@@ -90,5 +105,12 @@ public class Usuario {
     @Override
     public String toString() {
         return nombres + " " + apellidos;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

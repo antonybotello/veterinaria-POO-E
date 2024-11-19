@@ -33,9 +33,16 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
 
     @Override
     public void delete(int id) throws SQLException {
-        String query = "DELETE FROM usuarios WHERE idUsuarios=?";
+        Usuario obj= getById(id);
+        // String query = "DELETE FROM usuarios WHERE idUsuarios=?";
+        // try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        //     stmt.setInt(1, id);
+        //     stmt.executeUpdate();
+        // }
+        String query = "UPDATE usuarios SET  estado=? WHERE idUsuarios=?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, id);
+            stmt.setString(1, obj.getEstado());
+            stmt.setInt(2, obj.getId());
             stmt.executeUpdate();
         }
     }
@@ -53,7 +60,8 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
                         rs.getString("apellidos"),
                         rs.getString("correo"),
                         rs.getString("clave"),
-                        rs.getString("rol")
+                        rs.getString("rol"),
+                        rs.getString("estado")
                 ));
             }
         }
@@ -75,6 +83,7 @@ public class UsuarioImplDAO implements GenericDAO<Usuario> {
                     usuario.setCorreo(rs.getString("correo"));
                     usuario.setClave(rs.getString("clave"));
                     usuario.setRol(rs.getString("rol"));
+                    usuario.setEstado(rs.getString("estado"));
                     return usuario;
                 }
             }
